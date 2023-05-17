@@ -1,7 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { AuthContext } from '../../../Provider/AuthProvider/AuthProvider';
+import { HiUserCircle } from "react-icons/hi";
 
 const NavBar = () => {
+    const { user, signOutUser, setLoading } = useContext(AuthContext)
+    const location = useLocation();
+
+    const handleSignOut = () => {
+        signOutUser()
+            .then(() => {
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error.message)
+            })
+    }
+
     return (
         <div className="flex justify-between navbar md:px-5 bg-base-300 h-20">
             <div className="">
@@ -10,11 +25,15 @@ const NavBar = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </label>
                     <div tabIndex={0} className='md:space-x-8 menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-28'>
-                        <Link to='/'>Home</Link>
-                        <Link to='/allToys'>All Toys</Link>
-                        <Link to='/myToys'>My Toys</Link>
-                        <Link to='/addToys'>Add A Toys</Link>
-                        <Link to='/blog'>Blog</Link>
+                        <Link className={location.pathname === '/' && 'text-[#01b0e9]'} to='/'>Home</Link>
+                        <Link className={location.pathname === '/allToys' && 'text-[#01b0e9]'} to='/allToys'>All Toys</Link>
+                        {
+                            user && <>
+                                <Link className={location.pathname === '/myToys' && 'text-[#01b0e9]'} to='/myToys'>My Toys</Link>
+                                <Link className={location.pathname === '/addToys' && 'text-[#01b0e9]'} to='/addToys'>Add A Toys</Link>
+                            </>
+                        }
+                        <Link className={location.pathname === '/blog' && 'text-[#01b0e9]'} to='/blog'>Blog</Link>
                     </div>
                 </div>
                 <div className='flex items-center'>
@@ -22,16 +41,28 @@ const NavBar = () => {
                     <p className='md:text-3xl text-lg font-bold'>Animagic Action Figure</p>
                 </div>
             </div>
-                <div className='md:space-x-8 font-bold hidden md:flex'>
-                    <Link to='/'>Home</Link>
-                    <Link to='/allToys'>All Toys</Link>
-                    <Link to='/myToys'>My Toys</Link>
-                    <Link to='/addToys'>Add A Toys</Link>
-                    <Link to='/blog'>Blog</Link>
-                </div>
-            <div className="">
-                <Link to='/login'><button className='btn font-bold rounded-md'>Login</button></Link>
+            <div className='md:space-x-8 font-bold hidden md:flex'>
+                <Link className={location.pathname === '/' && 'text-[#01b0e9]'} to='/'>Home</Link>
+                <Link className={location.pathname === '/allToys' && 'text-[#01b0e9]'} to='/allToys'>All Toys</Link>
+                {
+                    user && <>
+                        <Link className={location.pathname === '/myToys' && 'text-[#01b0e9]'} to='/myToys'>My Toys</Link>
+                        <Link className={location.pathname === '/addToys' && 'text-[#01b0e9]'} to='/addToys'>Add A Toys</Link>
+                    </>
+                }
+                <Link className={location.pathname === '/blog' && 'text-[#01b0e9]'} to='/blog'>Blog</Link>
             </div>
+            {
+                user ? <div>
+                    <div className="tooltip hover:tooltip-open tooltip-bottom" data-tip={user.displayName ? user.displayName : 'No UserName'}>
+                        {
+                            user.photoURL ? <img className='w-8 h-8 mx-3 md:mx-5 rounded-full' src={user.photoURL} alt="" /> : <HiUserCircle className='w-8 h-8 mx-3 md:mx-5' />
+                        }
+                    </div>
+                    <button onClick={handleSignOut} className='btn font-bold rounded-md'>Sign Out</button>
+                </div> : <Link to='/login'><button className='btn font-bold rounded-md'>Login</button></Link>
+            }
+
         </div>
     );
 };

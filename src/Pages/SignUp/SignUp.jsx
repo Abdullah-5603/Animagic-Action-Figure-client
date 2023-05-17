@@ -35,6 +35,9 @@ const SignUp = () => {
                 if (errorMessage == 'Firebase: Error (auth/email-already-in-use).') {
                     setLoading(false)
                     setError('This account already exist. Please login')
+                } else if (errorMessage == 'Firebase: Error (auth/invalid-email).') {
+                    setLoading(false)
+                    setError('Invalid email address')
                 }
                 console.log(errorMessage)
             })
