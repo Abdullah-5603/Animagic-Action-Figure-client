@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
-c
 import Select from 'react-select';
 
 const AddToy = () => {
@@ -88,6 +87,7 @@ const AddToy = () => {
                         <span className="label-text font-semibold">Sub-category</span>
                     </label>
                     <Select
+                        onFocus='outline-none'
                         placeholder='Select subcategory'
                         defaultValue={selectedOption}
                         onChange={setSelectedOption}
