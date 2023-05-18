@@ -30,7 +30,7 @@ const NavBar = () => {
                         {
                             user && <>
                                 <Link className={location.pathname === '/myToys' && 'text-[#01b0e9]'} to='/myToys'>My Toys</Link>
-                                <Link className={location.pathname === '/addToy' && 'text-[#01b0e9]'} to='/addToy'>Add A Toys</Link>
+                                <Link className={location.pathname === '/addToy' && 'text-[#01b0e9]'} to='/addToy'>Add A Toy</Link>
                             </>
                         }
                         <Link className={location.pathname === '/blog' && 'text-[#01b0e9]'} to='/blog'>Blog</Link>
@@ -47,7 +47,7 @@ const NavBar = () => {
                 {
                     user && <>
                         <Link className={location.pathname === '/myToys' && 'text-[#01b0e9]'} to='/myToys'>My Toys</Link>
-                        <Link className={location.pathname === '/addToy' && 'text-[#01b0e9]'} to='/addToy'>Add A Toys</Link>
+                        <Link className={location.pathname === '/addToy' && 'text-[#01b0e9]'} to='/addToy'>Add A Toy</Link>
                     </>
                 }
                 <Link className={location.pathname === '/blog' && 'text-[#01b0e9]'} to='/blog'>Blog</Link>
