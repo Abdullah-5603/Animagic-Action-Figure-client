@@ -1,46 +1,59 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
-import Swal from 'sweetalert2';
+c
+import Select from 'react-select';
 
 const AddToy = () => {
-    const {user} = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
+    const [selectedOption, setSelectedOption] = useState(null);
 
-    const handleSubmit = event =>{
+    const options = [
+        { value: 'Action Figures', label: 'Action Figures' },
+        { value: 'Completed Figures', label: 'Completed Figures' },
+        { value: 'Nendoroid', label: 'Nendoroid' },
+        { value: 'figma', label: 'figma' },
+        { value: 'Plastic Kit', label: 'Plastic Kit' },
+        { value: 'Garage Kits', label: 'Garage Kits' },
+        { value: 'Scenery Set', label: 'Scenery Set' },
+    ];
+
+    const category = selectedOption?.map(sp => sp.value);
+
+    const handleSubmit = event => {
         event.preventDefault();
         const form = event.target;
         const photo = form.photo.value;
         const toyName = form.toyName.value;
         const sellerName = form.sellerName.value;
         const email = form.email.value;
-        const category = form.category.value;
         const price = form.price.value;
         const ratings = form.ratings.value;
         const quantity = form.quantity.value;
         const description = form.description.value;
 
-        const toyInfo = {photo, toyName, sellerName, email, category, price, ratings, quantity, description}
+        const toyInfo = { photo, toyName, sellerName, email, category, price, ratings, quantity, description }
 
-        fetch('http://localhost:3000/allToys',{
-            method : 'POST',
-            headers : {
-                'content-type' : 'application/json'
+        fetch('http://localhost:3000/allToys', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
             },
-            body : JSON.stringify(toyInfo)
+            body: JSON.stringify(toyInfo)
         })
-        .then(res => res.json())
-        .then(data => {
-            if(data.acknowledged){
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Hurrah....',
-                    text: 'Toy added successfully',
-                  })
-            }
-            console.log(data)
-        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.acknowledged) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Hurrah....',
+                        text: 'Toy added successfully',
+                    })
+                }
+                console.log(data)
+            })
     }
     return (
-        <form onSubmit={handleSubmit}  className='p-10 my-5 w-4/6 mx-auto border-2 shadow-2xl'>
+        <form onSubmit={handleSubmit} className='p-10 my-5 w-4/6 mx-auto border-2 shadow-2xl'>
             <p className='mb-7 text-3xl font-bold text-center'>
                 Add A Toy
             </p>
@@ -74,7 +87,13 @@ const AddToy = () => {
                     <label className="label">
                         <span className="label-text font-semibold">Sub-category</span>
                     </label>
-                    <input type="text" name='category' placeholder='What the fuck i should put here ??' className="input input-bordered focus:outline-none" />
+                    <Select
+                        placeholder='Select subcategory'
+                        defaultValue={selectedOption}
+                        onChange={setSelectedOption}
+                        options={options}
+                        isMulti
+                    />
                 </div>
                 <div className="form-control">
                     <label className="label">
