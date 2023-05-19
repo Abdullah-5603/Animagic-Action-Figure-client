@@ -20,8 +20,8 @@ const AllToys = () => {
   };
 
   return (
-    <div className="my-10 p-10 flex flex-col">
-      <p className="text-3xl font-bold text-center my-10">All Toys Here</p>
+    <div className="my-10 px-10 flex flex-col">
+      <p className="text-3xl font-bold text-center mb-10">All Toys Here</p>
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -42,7 +42,7 @@ const AllToys = () => {
                     <td>{toyData?.toyName}</td>
                     <td>{toyData?.category?.join(', ')}</td>
                     <td>$ {toyData?.price}</td>
-                    <td>{toyData?.quantity}</td>
+                    <td>{toyData?.quantity} Pice</td>
                     <td>
                     <Link to={`/toyDetails/${toyData._id}`}>
                         <button className="btn">view details</button>
@@ -56,7 +56,7 @@ const AllToys = () => {
                     <td>{toyData?.toyName}</td>
                     <td>{toyData.category.join(', ')}</td>
                     <td>$ {toyData?.price}</td>
-                    <td>{toyData?.quantity}</td>
+                    <td>{toyData?.quantity} Pice</td>
                     <td>
                       <Link to={`/toyDetails/${toyData._id}`}>
                         <button className="btn">view details</button>
