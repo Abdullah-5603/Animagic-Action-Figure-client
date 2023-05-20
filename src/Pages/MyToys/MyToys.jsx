@@ -1,18 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
-import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
+import { FaPencilAlt, FaStar, FaTrashAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import useTitle from '../../Hooks/useTitle';
 
 const MyToys = () => {
-    const { user } = useContext(AuthContext)
-    const [toysData, setToysData] = useState([])
-    const [open, setOpen] = useState(false)
-    const [id, setId] = useState('')
+    const { user } = useContext(AuthContext);
+    const [toysData, setToysData] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [id, setId] = useState('');
+    const [sort, setSort] = useState(true);
+    useTitle('My Toys')
+    // console.log(toysData)
+
     useEffect(() => {
-        fetch(`http://localhost:3000/myToys/${user?.email}`)
-            .then(res => res.json())
-            .then(data => setToysData(data))
-    }, [user, toysData])
+        if (user && user.email) {
+            fetch(`http://localhost:3000/myToys?email=${encodeURIComponent(user?.email)}&sort=${sort ? 'true' : 'false'}`)
+                .then(res => res.json())
+                .then(data => setToysData(data));
+        }
+    }, [user,toysData, sort]);
 
     const handleDelete = _id => {
         const swalWithBootstrapButtons = Swal.mixin({
@@ -45,6 +52,8 @@ const MyToys = () => {
                                 'Your file has been deleted.',
                                 'success'
                             )
+                            const remaining = toysData.filter(td => td._id !== _id)
+                            setToysData(remaining)
                         }
                         console.log(data)
                     })
@@ -63,45 +72,47 @@ const MyToys = () => {
     const handleUpdate = (_id) => {
         setId(_id)
         setOpen(true);
-      };
-      
-      const handleSubmitUpdate = (event) => {
+    };
+
+    const handleSubmitUpdate = (event) => {
         event.preventDefault();
         const form = event.target;
         const price = form.price.value;
         const quantity = form.quantity.value;
         const description = form.description.value;
-      
-        fetch(`http://localhost:3000/myToys/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ price, quantity, description }),
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (data.result.modifiedCount > 0) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Haha....',
-                text: 'Information updated successfully!',
-              });
-              const remaining = toysData.filter((dt) => dt._id !== id);
 
-              setToysData(remaining);
-            }
-            // console.log(data);
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-      
+        fetch(`http://localhost:3000/myToys/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ price, quantity, description }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.result.modifiedCount > 0) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Haha....',
+                        text: 'Information updated successfully!',
+                    });
+                    const remaining = toysData.filter((dt) => dt._id !== id);
+                    const updatedData = toysData.find(dt => dt._id === id)
+                    const newToysData = [updatedData, ...remaining]
+                    setToysData(newToysData);
+                }
+                // console.log(data);
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+
         setOpen(false);
-      };
-      
+    };
+
+
     return (
-        <div className="my-10 px-10 flex flex-col">
+        <div className="my-10 px-10 flex flex-col w-full items-center">
             {open && (
                 <>
                     <input type="checkbox" id="my-modal-6" className="modal-toggle" />
@@ -133,29 +144,44 @@ const MyToys = () => {
             )}
 
             <p className="text-3xl font-bold text-center mb-10">My Toys</p>
-            <div className="overflow-x-auto">
-                <table className="table w-full">
-                    <thead>
+            <div className='w-1/3 flex justify-between mb-5'>
+                <button className='btn' onClick={() => setSort(true)}>Price Low to High</button>
+                <button className='btn' onClick={() => setSort(false)}>Price High to Low</button>
+            </div>
+            <div className="overflow-x-auto w-full">
+                <table className="table table-normal">
+                    <thead className=''>
                         <tr>
-                            <th>Seller Name</th>
+                            <th>#</th>
                             <th>Toy Name</th>
+                            <th>Toy Photo</th>
+                            <th>Seller Name</th>
+                            <th>Seller Email</th>
                             <th>Sub-Category</th>
+                            <th>Description</th>
                             <th>Price</th>
+                            <th>Ratings</th>
                             <th>Available Quantity</th>
-                            <th>Toy Details</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {toysData.map((toyData) => (
-                            <tr key={toyData._id} className="hover:bg-gray-100">
-                                <th>{toyData?.sellerName}</th>
+                    <tbody className=''>
+                        {toysData.map((toyData, index) => (
+                            <tr key={toyData._id} className="hover w-full">
+                                <td>{1 + index}</td>
                                 <td>{toyData?.toyName}</td>
-                                <td>{toyData?.category?.join(', ')}</td>
+                                <td><img className='rounded-lg' src={toyData?.photo} alt="" /></td>
+                                <th>{toyData?.sellerName}</th>
+                                <th>{toyData?.email}</th>
+                                <td >{toyData?.category?.join(', ')}</td>
+                                <td>{toyData?.description}</td>
                                 <td>$ {toyData?.price}</td>
+                                <td><div className='flex items-center'>{toyData?.ratings}<FaStar className='w-4 h-4 mx-2' /></div></td>
                                 <td>{toyData?.quantity} Pice</td>
-                                <td className='flex space-x-6'>
-                                <label htmlFor="my-modal-6" onClick={() => handleUpdate(toyData._id)} className='bg-[#c6b386] p-2 rounded-lg'><FaPencilAlt /></label>
-                                    <div onClick={() => handleDelete(toyData._id)} className='bg-[#c6b386] p-2 rounded-lg'><FaTrashAlt /></div>
+                                <td><div className='flex space-x-6'>
+                                    <label htmlFor="my-modal-6" onClick={() => handleUpdate(toyData._id)} className='cursor-pointer p-2 rounded-lg'><FaPencilAlt /></label>
+                                    <div onClick={() => handleDelete(toyData._id)} className='p-2 rounded-lg cursor-pointer'><FaTrashAlt /></div>
+                                </div>
                                 </td>
                             </tr>
                         ))

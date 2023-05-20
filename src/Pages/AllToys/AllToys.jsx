@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
+import useTitle from '../../Hooks/useTitle';
 
 const AllToys = () => {
   const toysData = useLoaderData();
   const [showBtn, setShowBtn] = useState(false);
   const [limit, setLimit] = useState([]);
+  useTitle('All Toys')
 
   useEffect(() => {
     if (toysData.length > 20) {
@@ -37,7 +39,7 @@ const AllToys = () => {
           <tbody>
             {toysData.length > 20
               ? limit.map((toyData) => (
-                  <tr key={toyData._id} className="hover:bg-gray-100">
+                  <tr key={toyData._id} className="hover">
                     <th>{toyData?.sellerName}</th>
                     <td>{toyData?.toyName}</td>
                     <td>{toyData?.category?.join(', ')}</td>
@@ -51,10 +53,10 @@ const AllToys = () => {
                   </tr>
                 ))
               : toysData.map((toyData) => (
-                  <tr key={toyData._id} className="hover:bg-gray-100">
+                  <tr key={toyData._id} className="hover">
                     <th>{toyData?.sellerName}</th>
                     <td>{toyData?.toyName}</td>
-                    <td>{toyData.category.join(', ')}</td>
+                    <td>{toyData?.category?.join(', ')}</td>
                     <td>$ {toyData?.price}</td>
                     <td>{toyData?.quantity} Pice</td>
                     <td>

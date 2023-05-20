@@ -1,12 +1,18 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
 import Loader from '../Shared/Loader/Loader';
+import useTitle from '../../Hooks/useTitle';
 
 const Login = () => {
     const { googleLoginUser, loginInUser, loading, setLoading, setUser } = useContext(AuthContext);
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/'
+    useTitle('Login')
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -22,7 +28,9 @@ const Login = () => {
         loginInUser(email, password)
             .then(result => {
                 const user = result.user;
+                setSuccess('Login successfully')
                 setLoading(false)
+                navigate(from, { replace: true })
                 form.reset();
             })
             .catch(error => {
@@ -43,6 +51,7 @@ const Login = () => {
             const user = result.user;
             setLoading(false)
             setUser(user)
+            navigate(from, { replace: true })
         })
         .catch(error =>{
             const errorMessage = error.message;
@@ -72,6 +81,7 @@ const Login = () => {
                             </label>
                         </div>
                         <p className='text-red-800'>{error}</p>
+                        <p className='text-green-800'>{success}</p>
                         <div className="form-control mt-6">
                             <button className="btn btn-primary">Login</button>
                         </div>
@@ -79,7 +89,7 @@ const Login = () => {
                             <div className="divider">OR</div>
                         </div>
                         <div className="form-control mt-6">
-                            <button onClick={handleGoogleLogin} className="btn hover:bg-transparent bg-transparent hover:text-black text-black flex items-center justify-center"><FcGoogle className='w-7 h-7 mx-5' /> Login with google</button>
+                            <button onClick={handleGoogleLogin} className="btn hover:bg-transparent bg-transparent flex items-center justify-center"><FcGoogle className='w-7 h-7 mx-5' /> Login with google</button>
                         </div>
                     </form>
                 </div>

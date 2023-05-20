@@ -1,16 +1,18 @@
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
 import { useLoaderData } from 'react-router-dom';
+import useTitle from '../../Hooks/useTitle';
 
 const ToyDetails = () => {
     const toyDetails = useLoaderData();
+    useTitle('Toy Details')
 
     return (
         <div className='p-10 my-5 w-full h-full'>
             <p className='text-4xl font-bold mb-5 text-center'>Detail information of {toyDetails?.toyName}</p>
             <img className='md:w-9/12 mx-auto' style={{height: '80vh'}} src={toyDetails?.photo} alt="" />
             <div className='space-y-5 my-5 '>
-                <p className='text-xl font-semibold'>Name : <span className='text-lg font-normal'>{toyDetails?.toyName}</span></p>
+                <p className='text-xl font-semibold'>Toy Name : <span className='text-lg font-normal'>{toyDetails?.toyName}</span></p>
                 <p className='text-xl font-semibold'>Seller Name : <span className='font-normal text-lg'>{toyDetails?.sellerName}</span></p>
                 <p className='text-xl font-semibold'>Seller Email : <span className='font-normal text-lg'>{toyDetails?.email}</span></p>
                 <p className='text-xl font-semibold'>Description : <span className='font-normal text-lg'>{toyDetails?.description}</span></p>

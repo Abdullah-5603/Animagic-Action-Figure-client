@@ -1,10 +1,13 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
 import Select from 'react-select';
+import Swal from 'sweetalert2';
+import useTitle from '../../Hooks/useTitle';
 
 const AddToy = () => {
     const { user } = useContext(AuthContext)
     const [selectedOption, setSelectedOption] = useState(null);
+    useTitle('Add A Toy')
 
     const options = [
         { value: 'Action Figures', label: 'Action Figures' },
@@ -52,7 +55,7 @@ const AddToy = () => {
             })
     }
     return (
-        <form onSubmit={handleSubmit} className='p-10 my-5 w-4/6 mx-auto border-2 shadow-2xl'>
+        <form onSubmit={handleSubmit} className='p-10 my-5 w-4/6 mx-auto border-2 rounded-xl shadow-2xl'>
             <p className='mb-7 text-3xl font-bold text-center'>
                 Add A Toy
             </p>

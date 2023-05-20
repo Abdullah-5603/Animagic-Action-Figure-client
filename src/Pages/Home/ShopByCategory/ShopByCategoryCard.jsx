@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../../../Provider/AuthProvider/AuthProvider';
 
 const ShopByCategoryCard = ({data}) => {
-    const {_id, toy_name, price, picture, ratings} = data
+    const {_id, toy_name, price, picture, ratings} = data;
+    const {user} = useContext(AuthContext)
+
+    const handleToast = () =>{
+        if(!user){
+            toast('Without login you can not visit this page. Please Login')
+        }
+    }
 
     return (
         <div className="card md:w-96 glass">
@@ -12,7 +21,7 @@ const ShopByCategoryCard = ({data}) => {
                 <p>Price: {price} $</p>
                 <p>Ratings: {ratings}</p>
                 <div className="card-actions justify-end">
-                    <Link to={`/categoryToyDetails/${_id}`}><button className="btn btn-primary">View Details</button></Link>
+                    <Link to={`/categoryToyDetails/${_id}`}><button onClick={handleToast} className="btn btn-primary">View Details</button></Link>
                 </div>
             </div>
         </div>

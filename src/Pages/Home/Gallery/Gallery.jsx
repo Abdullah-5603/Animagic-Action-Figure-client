@@ -1,8 +1,11 @@
+import Aos from 'aos';
 import React from 'react';
+
+Aos.init()
 
 const Gallery = () => {
     return (
-        <div className='my-12 px-10'>
+        <div data-aos='fade-up' data-aos-delay='500' className='my-12 px-10'>
             <p className='font-bold text-3xl text-center my-8'>Toy Gallery</p>
             <div className='grid md:grid-cols-4 grid-cols-1 gap-4 '>
                 <img className='rounded-lg' style={{width:'305px', height:'203px'}} src="https://i.ibb.co/1z8D0sC/patryk-norman-BBQOQFk-OICg-unsplash.jpg" alt="patryk-norman-BBQOQFk-OICg-unsplash" border="0" />
