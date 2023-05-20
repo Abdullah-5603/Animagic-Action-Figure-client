@@ -15,7 +15,7 @@ const MyToys = () => {
 
     useEffect(() => {
         if (user && user.email) {
-            fetch(`http://localhost:3000/myToys?email=${encodeURIComponent(user?.email)}&sort=${sort ? 'true' : 'false'}`)
+            fetch(`https://animagic-action-figure-server.vercel.app/myToys?email=${encodeURIComponent(user?.email)}&sort=${sort ? 'true' : 'false'}`)
                 .then(res => res.json())
                 .then(data => setToysData(data));
         }
@@ -40,7 +40,7 @@ const MyToys = () => {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:3000/myToys/${_id}`, {
+                fetch(`https://animagic-action-figure-server.vercel.app/myToys/${_id}`, {
                     method: 'DELETE'
                 })
                     .then(res => res.json())
@@ -81,7 +81,7 @@ const MyToys = () => {
         const quantity = form.quantity.value;
         const description = form.description.value;
 
-        fetch(`http://localhost:3000/myToys/${id}`, {
+        fetch(`https://animagic-action-figure-server.vercel.app/myToys/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

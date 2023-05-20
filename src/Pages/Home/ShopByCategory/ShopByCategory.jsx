@@ -19,7 +19,7 @@ const ShopByCategory = () => {
     };
 
     useEffect(() => {
-        fetch("http://localhost:3000/categoryToys")
+        fetch("https://animagic-action-figure-server.vercel.app/categoryToys")
             .then((res) => res.json())
             .then((data) => {
                 setData(data);

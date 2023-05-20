@@ -35,7 +35,7 @@ const AddToy = () => {
 
         const toyInfo = { photo, toyName, sellerName, email, category, price, ratings, quantity, description }
 
-        fetch('http://localhost:3000/allToys', {
+        fetch('https://animagic-action-figure-server.vercel.app/allToys', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
